@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2010-2012. Axon Framework
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <context:component-scan base-package="com.kingstar.unicenter.interfaces">
+        <context:exclude-filter type="regex" expression="com.kingstar.unicenter.interfaces.config.*"/>
+    </context:component-scan>
+
+    <mvc:annotation-driven validator="validator" content-negotiation-manager="contentNegotiationManager"/>
+
+    <mvc:view-controller path="/index.html"/>
+
+    <mvc:resources mapping="/js/**" location="/WEB-INF/js/" cache-period="${static.cache.period}"/>
+    <mvc:resources mapping="/css/**" location="/WEB-INF/css/" cache-period="${static.cache.period}"/>
+    <mvc:resources mapping="/fonts/**" location="/WEB-INF/fonts/" cache-period="${static.cache.period}"/>
+    <mvc:resources mapping="/img/**" location="/WEB-INF/img/" cache-period="${static.cache.period}"/>
+    <mvc:resources mapping="/doc/**" location="/WEB-INF/doc/" cache-period="${static.cache.period}"/>
+    <mvc:default-servlet-handler/>
+
+    <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="ignoreAcceptHeader" value="true" />
+        <property name="defaultContentType" value="text/html"/>
+        <property name="mediaTypes">
+            <value>
+                html=text/html
+                json=application/json
+                xml=application/xml
+            </value>
+        </property>
+        <property name="favorParameter" value="false" />
+    </bean>
+
+    <mvc:view-resolvers>
+        <mvc:content-negotiation>
+            <mvc:default-views>
+                <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+            </mvc:default-views>
+        </mvc:content-negotiation>
+        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+            <property name="prefix" value="/WEB-INF/jsp/"/>
+            <property name="suffix" value=".jsp"/>
+        </bean>
+    </mvc:view-resolvers>
+
+
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>WEB-INF/messages/validation</value>
+                <value>WEB-INF/messages/error</value>
+                <value>WEB-INF/messages/msg</value>
+                <value>WEB-INF/messages/print</value>
+                <value>WEB-INF/messages/statement</value>
+                <value>WEB-INF/messages/confirm</value>
+                <value>WEB-INF/messages/login</value>
+            </list>
+        </property>
+        <property name="cacheSeconds" value="10"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <property name="defaultLocale" value="zh_CN"/>
+    </bean>
+
+
+    <mvc:annotation-driven conversion-service="conversionService"/>
+
+    <bean id="conversionService"
+          class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <!--<bean class="org.example.MyConverter"/>-->
+            </set>
+        </property>
+        <property name="formatters">
+            <set>
+                <!--<bean class="org.example.MyFormatter"/>-->
+                <!--<bean class="org.example.MyAnnotationFormatterFactory"/>-->
+            </set>
+        </property>
+        <property name="formatterRegistrars">
+            <set>
+                <!--<bean class="org.example.MyFormatterRegistrar"/>-->
+            </set>
+        </property>
+    </bean>
+
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="20000000000" />  <!-- 2G -->
+    </bean>
+
+    <security:global-method-security
+            jsr250-annotations="enabled" secured-annotations="enabled" />
+
+    <beans profile="dev">
+        <context:property-placeholder
+                ignore-unresolvable="true"
+                location="classpath:com/kingstar/unicenter/interfaces/web.dev.properties"/>
+    </beans>
+    <beans profile="prod">
+        <!--<security:global-method-security-->
+        <!--jsr250-annotations="enabled" secured-annotations="enabled" />-->
+        <context:property-placeholder
+                ignore-unresolvable="true"
+                location="classpath:com/kingstar/unicenter/interfaces/web.prod.properties"/>
+    </beans>
+</beans>

@@ -1,0 +1,19 @@
+/*!
+ * Start Bootstrap - SB Admin 2 Bootstrap Admin Theme (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+.nav.side-nav a {
+    color: #767676;
+    font-weight: 400;
+    font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.nav.side-nav li.active>a {
+    font-weight: 800;
+    color: #767676;
+    border-left: 2px solid #767676;
+}

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2010-2012. Axon Framework
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+         http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         id="pengyuan" version="2.5">
+
+    <display-name>pengyuan</display-name>
+
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>pengyuan</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>spring.profiles.active</param-name>
+        <param-value>@spring.profiles.active@</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            <!--classpath:META-INF/spring/web-context.xml,
+            classpath:META-INF/spring/codes-context.xml,
+            classpath:META-INF/spring/users-context.xml,
+            classpath:META-INF/spring/operators-context.xml,
+            classpath:META-INF/spring/unicenter-config-context.xml,
+            classpath:META-INF/spring/unicenter-approvals-context.xml,
+            classpath:META-INF/spring/sms-context.xml,
+            classpath:META-INF/spring/clients-context.xml,
+            classpath:META-INF/spring/images-context.xml,
+            classpath:META-INF/spring/drtp-support-context.xml,
+            classpath:META-INF/spring/future-registration-context.xml,
+            classpath:META-INF/spring/suitability-management-context.xml,
+            classpath:META-INF/security-context.xml,
+            classpath:META-INF/spring/event-bus-context.xml-->
+        </param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>logbackConfigLocation</param-name>
+        <param-value>classpath:logback.xml</param-value>
+    </context-param>
+
+    <!--<context-param>-->
+    <!--<param-name>decoratorVersion</param-name>-->
+    <!--<param-value>v3.7</param-value>-->
+    <!--</context-param>-->
+
+    <!-- ====================================================================== -->
+    <!--                             Listeners                                  -->
+    <!-- ====================================================================== -->
+<!--    <listener>
+        <listener-class>ch.qos.logback.ext.spring.web.LogbackConfigListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>
+    </listener>-->
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>
+            org.springframework.web.context.request.RequestContextListener
+        </listener-class>
+    </listener>
+
+    <!-- ====================================================================== -->
+    <!--                             Filters                                    -->
+    <!-- ====================================================================== -->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+
+    <!--<filter>
+        <filter-name>sitemesh</filter-name>
+        <filter-class>com.opensymphony.module.sitemesh.filter.PageFilter</filter-class>
+    </filter>-->
+
+    <!--<filter>-->
+        <!--<filter-name>openSessionInView</filter-name>-->
+        <!--<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>-->
+    <!--</filter>-->
+
+    <!-- Character Encoding filter -->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+
+   <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+<!--    <filter-mapping>
+        <filter-name>sitemesh</filter-name>
+        <url-pattern>/*</url-pattern>
+        &lt;!&ndash;<dispatcher>ERROR</dispatcher>&ndash;&gt;
+        &lt;!&ndash;<dispatcher>FORWARD</dispatcher>&ndash;&gt;
+    </filter-mapping>-->
+
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <!--<filter-mapping>-->
+        <!--<filter-name>openSessionInView</filter-name>-->
+        <!--<url-pattern>/*</url-pattern>-->
+    <!--</filter-mapping>-->
+
+    <!-- ====================================================================== -->
+    <!--                             Servlets                                   -->
+    <!-- ====================================================================== -->
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.map</url-pattern>
+        <url-pattern>*.js</url-pattern>
+        <url-pattern>*.css</url-pattern>
+        <url-pattern>*.xml</url-pattern>
+        <url-pattern>*.zip</url-pattern>
+        <url-pattern>*.gif</url-pattern>
+        <url-pattern>*.jpg</url-pattern>
+        <url-pattern>*.png</url-pattern>
+        <url-pattern>*.swf</url-pattern>
+    </servlet-mapping>
+
+
+
+
+    <session-config>
+        <session-timeout>60</session-timeout>
+    </session-config>
+
+    <welcome-file-list>
+        <welcome-file>login.jsp</welcome-file>
+    </welcome-file-list>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error?code=500</location>
+    </error-page>
+
+    <error-page>
+        <error-code>405</error-code>
+        <location>/error?code=405</location>
+    </error-page>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error?code=404</location>
+    </error-page>
+
+    <error-page>
+        <error-code>400</error-code>
+        <location>/error?code=400</location>
+    </error-page>
+
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/error?code=500</location>
+    </error-page>
+
+</web-app>

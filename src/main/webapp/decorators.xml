@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<decorators defaultdir="/WEB-INF/decorators">
+    <excludes>
+        <pattern>*.html*</pattern>
+        <pattern>*.json*</pattern>
+        <pattern>*.xml*</pattern>
+        <pattern>*.xls*</pattern>
+        <pattern>*.doc*</pattern>
+        <pattern>*.png*</pattern>
+        <pattern>*.jpg*</pattern>
+        <pattern>*.jpeg*</pattern>
+        <pattern>*.download*</pattern>
+        <pattern>*/images/get/*</pattern>
+        <pattern>*/img/*</pattern>
+        <pattern>*/fonts/*</pattern>
+        <pattern>*/js/*</pattern>
+        <pattern>*/css/*</pattern>
+        <pattern>*/doc/*</pattern>
+    </excludes>
+
+    <decorator name="master" page="master.jsp">
+        <pattern>/init*</pattern>
+        <pattern>/login*</pattern>
+        <pattern>/error*</pattern>
+        <pattern>/counter/suitability/quiz*</pattern>
+        <pattern>/clients/register*</pattern>
+        <pattern>/clients/login*</pattern>
+        <pattern>/admin/operator/showRetrievePasswordPage*</pattern>
+        <pattern>/admin/operator/forgetPasswordSuccessful*</pattern>
+        <pattern>/admin/operator/resetPassword*</pattern>
+        <pattern>/admin/operator/resetPasswordSuccessful*</pattern>
+    </decorator>
+
+    <decorator name="dashboard-browser" page="master-browser.jsp">
+        <pattern>/browser*</pattern>
+    </decorator>
+
+    <decorator name="dashboard-internet" page="internet-dashboard.jsp">
+        <pattern>/clients*</pattern>
+    </decorator>
+
+    <decorator name="dashboard-suitability" page="suitability-dashboard.jsp">
+        <pattern>/suitability*</pattern>
+        <pattern>/images*</pattern>
+        <pattern>/admin*</pattern>
+        <pattern>/codes*</pattern>
+        <pattern>/user*</pattern>
+        <pattern>/operator/me*</pattern>
+    </decorator>
+
+    <decorator name="dashboard" page="master-dashboard.jsp">
+        <pattern>/registration*</pattern>
+    </decorator>
+
+</decorators>
